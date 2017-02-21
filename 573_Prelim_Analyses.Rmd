@@ -9,15 +9,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preliminary Analyses
 ```{r}
-data <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
-names(data)
+gtd <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
+names(gtd)
+#install.packages("tidyverse")
+library(tidyverse)
 ```
 
 
 1) How many unique observations to you have?
 ```{r}
-nrow(data)
-str(data)
+nrow(gtd)
+str(gtd)
 
 vars <- c("iyear", "imonth", "iday", "longitude", "latitude", "city", "provstate", "crit1", "crit2", "crit3", "success", "location", "attacktype1", "suicide", "weaptype1", "weapsubtype1", "targtype1", "targsubtype1", "gname", "ingroup", "nperps", "nkill", "nkillus", "nkillter", "nwound", "nwoundus", "nwoundte", "nperpcap", "property", "propextent", "ihostkid", "hostkid", "doubtterr", "multiple")
 ```
@@ -26,6 +28,7 @@ This dataset includes 2,693 observations of terrorist attacks in the United Stat
 
 2) What information/features/characteristics do you have for each observation?
 ```{r}
+
 ```
 
 
@@ -33,7 +36,17 @@ This dataset includes 2,693 observations of terrorist attacks in the United Stat
 ```{r}
 vars <- c("iyear", "imonth", "iday", "longitude", "latitude", "city", "provstate", "crit1", "crit2", "crit3", "success", "location", "attacktype1", "suicide", "weaptype1", "weapsubtype1", "targtype1", "targsubtype1", "gname", "ingroup", "nperps", "nkill", "nkillus", "nkillter", "nwound", "nwoundus", "nwoundte", "nperpcap", "property", "propextent", "ihostkid", "hostkid", "doubtterr", "multiple")
 
-lapply(data, summary, vars)
+
+for(var in vars) {
+    sum_stats <- summarise(gtd,
+    min(var, na.rm = TRUE),
+    max(var, na.rm = TRUE),
+    mean(var, na.rm = TRUE),
+    median(var, na.rm = TRUE),
+    sd(var, na.rm = TRUE),
+    summary(var, na.rm = TRUE))
+}
+
 ```
 
 
