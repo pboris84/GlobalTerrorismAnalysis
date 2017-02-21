@@ -10,7 +10,7 @@ The dataset of the current study was collected by START researchers at the Unive
 __The Global Terrorism Database (GTD) is an open-source database including information on terrorist events around the world from 1970 through 2015 (with annual updates planned for the future). Unlike many other event databases, the GTD includes systematic data on domestic as well as international terrorist incidents that have occurred during this time period and now includes more than 150,000 cases. (START, 2016)__
 
 The data is housed in a 139 mb .csv file, with 137 variables pertaining to terrorist attack ID, date, incident, location, attack, weapon, target/victim, and perpetrator information, casualties and consequences, as well as additional information from “publicly available, unclassified source materials” (START, 2016). Variables of interest include numerical (e.g. number of fatalities), text (e.g. group name), and categorical variables (e.g. success). The current study aims to look at a subset of these data, specifically the 2693 attacks that occurred in the US from 1970 to 2015. 
-
+   
   
 # Introduction
 
