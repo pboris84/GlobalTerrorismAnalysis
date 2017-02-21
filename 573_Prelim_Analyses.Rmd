@@ -1,0 +1,68 @@
+---
+title: "INFX 573 Preliminary Analyses"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preliminary Analyses
+```{r}
+gtd <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
+names(gtd)
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+1) How many unique observations to you have?
+```{r}
+nrow(gtd)
+str(gtd)
+
+vars <- c("iyear", "imonth", "iday", "longitude", "latitude", "city", "provstate", "crit1", "crit2", "crit3", "success", "location", "attacktype1", "suicide", "weaptype1", "weapsubtype1", "targtype1", "targsubtype1", "gname", "ingroup", "nperps", "nkill", "nkillus", "nkillter", "nwound", "nwoundus", "nwoundte", "nperpcap", "property", "propextent", "ihostkid", "hostkid", "doubtterr", "multiple")
+```
+
+This dataset includes 2,693 observations of terrorist attacks in the United States.
+
+2) What information/features/characteristics do you have for each observation?
+```{r}
+
+```
+
+
+3) What are the min/max/mean/median/sd values for each of these features?
+```{r}
+vars <- c("iyear", "imonth", "iday", "longitude", "latitude", "city", "provstate", "crit1", "crit2", "crit3", "success", "location", "attacktype1", "suicide", "weaptype1", "weapsubtype1", "targtype1", "targsubtype1", "gname", "ingroup", "nperps", "nkill", "nkillus", "nkillter", "nwound", "nwoundus", "nwoundte", "nperpcap", "property", "propextent", "ihostkid", "hostkid", "doubtterr", "multiple")
+
+
+for(var in vars) {
+    sum_stats <- summarise(gtd,
+    min(var, na.rm = TRUE),
+    max(var, na.rm = TRUE),
+    mean(var, na.rm = TRUE),
+    median(var, na.rm = TRUE),
+    sd(var, na.rm = TRUE),
+    summary(var, na.rm = TRUE))
+}
+
+```
+
+
+4) What is the distribution of the core features (show a histogram)?
+```{r}
+```
+
+5) Are there obvious trends in the data (over time, across subgroups, etc.), and are the differences statistically significant?
+```{r}
+```
+
+6) What are the other salient aspects of the data (e.g. geospatial factors, text content, etc.)
+```{r}
+```
+
+7) Provide a bullet-list of the next 5-10 tasks you will perform in analyzing your dataset
+```{r}
+
+```
