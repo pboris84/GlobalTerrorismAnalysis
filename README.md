@@ -2,7 +2,6 @@
 
 # Data set
 
-<<<<<<< HEAD
 ![Google Drive Link](https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrYU9aaElVdkRGZzg/view?usp=sharing)
 
 The dataset of the current study was collected by START researchers at the University of Maryland:
@@ -42,4 +41,3 @@ If we are able to answer the research question of what best predicts whether or 
 =======
 Link to Data Set: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrYU9aaElVdkRGZzg/view?usp=sharing
 Codebook: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrajBtekJhMm9TcDg/view?usp=sharing
->>>>>>> b53e6d5902c2e1f3954f56c02b5043da9416a8a8
