@@ -2,6 +2,7 @@
 
 # Data set
 
+<<<<<<< HEAD
 ![Google Drive Link](https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrYU9aaElVdkRGZzg/view?usp=sharing)
 
 The dataset of the current study was collected by START researchers at the University of Maryland:
@@ -38,3 +39,7 @@ As a possible extension of this project, we could incorporate the 3-5 most impor
 We expect that one to three key factors will emerge to predict attack success, number of casualties, and number of hostages taken. We also expect that the 9/11 attacks will significantly skew the dataset when referring to casualties, and will likely have to test a number of data cleaning approaches (for instance, utilizing logistic scaling and tests for outliers).
 
 If we are able to answer the research question of what best predicts whether or not a terrorist attack was successful, that information would be useful to law enforcement, the military, and government agencies in potentially mitigating future attacks. Similarly, being able to predict the amount of casualties given certain attack characteristics might help agencies develop policies that mitigate against those attacks in the future. For instance, if bomb-related attacks are discovered to have a strong relationship with total attack casualties, then counter-terrorism measures could be appropriated accordingly.
+=======
+Link to Data Set: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrYU9aaElVdkRGZzg/view?usp=sharing
+Codebook: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrajBtekJhMm9TcDg/view?usp=sharing
+>>>>>>> b53e6d5902c2e1f3954f56c02b5043da9416a8a8
