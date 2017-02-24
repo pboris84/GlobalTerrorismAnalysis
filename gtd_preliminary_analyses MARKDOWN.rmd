@@ -1,0 +1,271 @@
+---
+title: "INFX 573 Exploratory Analyses"
+author: "Timothy Pace, Boris Pavlov, Mike Stepanovic"
+date: "2/21/2017"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE}
+# load packages
+library(ggplot2)
+library(dplyr)
+library(maps)
+library(mapproj)
+library(fBasics)
+
+# load data
+gtd <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
+gtd_small <- select(gtd, success, attacktype1_txt, targtype1_txt, 
+                    targsubtype1_txt, weaptype1_txt, weapsubtype1_txt, 
+                    iyear, imonth, iday, longitude, latitude, ingroup, 
+                    nperps, nkill, nwound, ishostkid, nhostkid)
+
+no.missing.data <- subset(gtd_small, nperps > 0 & nhostkid > 0 & ingroup > 0)
+plot(no.missing.data)
+```
+
+## 1) How many unique observations to you have?
+
+We have 2,693 unique observations:
+```{r}
+nrow(gtd_small)
+```
+
+## 2) What information/features/characteristics do you have for each observation?
+
+We have a combination of data classes for continuous variables, as well as several categorical variables:
+```{r}
+str(gtd_small)
+```
+
+## 3) What are the min/max/mean/median/sd values for each of these features?
+
+### Continuous Variables
+```{r}
+# select only the continuous variables
+gtd.continuous <- cbind(gtd$success, gtd$iyear, gtd$imonth, gtd$iday, gtd$longitude, 
+                        gtd$latitude, gtd$ingroup, gtd$nperps, gtd$nkill, gtd$nwound, 
+                        gtd$ishostkid, gtd$nhostkid)
+# improve readability
+colnames(gtd.continuous) <- c("success", "year", "month", "day", "longitude", "latitude", 
+                              "ingroup", "nperps", "nkill", "nwound", "ishostkid", "nhostkid")
+# print descriptive stats
+basicStats(gtd.continuous)[c("nobs", "NAs", "Minimum", "Maximum", "Mean", "Stdev"),]
+```
+
+### Categorical Variables
+```{r}
+# view top 10 levels for each categorical variable of interest
+# need to reorder levels in attacktype1
+gtd$attacktype1_txt <- factor(gtd_small$attacktype1_txt,
+                             levels(gtd_small$attacktype1_txt)[c(3,4,1,2,8,6,7,5,9)])
+summary(gtd["attacktype1_txt"], maxsum=10)
+summary(gtd["targsubtype1_txt"], maxsum=10)
+summary(gtd["targsubtype1_txt"], maxsum=10)
+summary(gtd["weaptype1_txt"], maxsum=10)
+summary(gtd["weapsubtype1_txt"], maxsum=10)
+```
+
+## 4)  What is the distribution of the core features (show a histogram)?
+
+```{r}
+# success
+ggplot(gtd, aes(x = success)) + geom_histogram() + 
+  labs(x = "Attack Success or Failure", y = "Frequency", 
+       title = "Histogram of Attack Success or Failure")
+
+# attack type
+ggplot(gtd, aes(x = attacktype1_txt, fill = attacktype1_txt)) + geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
+  scale_x_discrete(labels = abbreviate) + 
+  labs(x = "Attack Type", y = "Attack Frequency") + 
+  guides(fill=guide_legend(title="US Terrorist Attacks: Type Frequency"))
+
+# target type
+ggplot(gtd, aes(x = targtype1_txt)) + geom_bar(aes(fill = targtype1_txt)) + 
+  theme_minimal(base_size = 9) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+        legend.text = element_text(size = 7)) + 
+  scale_x_discrete(labels = abbreviate) + labs(x = "Target Type", y = "Attack Frequency") + 
+  guides(fill = guide_legend(title = "US Terrorist Attacks: Target Type Frequency"))
+
+# weapon type
+ggplot(gtd, aes(x = weaptype1_txt, fill = weaptype1_txt)) + geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+  legend.text = element_text(size = 6), legend.title=element_text(size=9)) + 
+  scale_x_discrete(labels = abbreviate) + labs(x = "Weapon Type", y = "Attack Frequency") + 
+  guides(fill = guide_legend(title = "US Terrorist Attacks: Weapon Type Frequency"))
+
+# weapon subtype
+ggplot(gtd, aes(x = weapsubtype1_txt, fill = weapsubtype1_txt)) + geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+  legend.text = element_text(size = 5), legend.title = element_text(size = 8)) + 
+  scale_x_discrete(labels = abbreviate) + 
+  guides(fill = guide_legend(title = "US Terrorist Attacks: Weapon Sub Type Frequency")) + 
+  labs(x = "Weapon Sub Type", y = "Attack Frequency")
+
+# year 
+ggplot(gtd, aes(x = iyear)) + geom_histogram() + 
+  labs(title = "Histogram of Attacks By Year", x = "Year", y = "Frequency")
+
+# month
+  ggplot(gtd, aes(x = imonth)) + geom_histogram() + 
+  labs(title = "Histogram of Attacks By Month", x = "Month", y = "Frequency")
+
+# day
+ggplot(gtd, aes(x = iday)) + geom_histogram() + 
+  labs(title = "Histogram of Attacks By Day", x = "Day", y = "Frequency")
+
+# longitude
+ggplot(gtd, aes(x = longitude)) + geom_histogram() + 
+  labs(title = "Histogram of Attack Longtitudes", x = "Attack Longtitude", y = "Frequency")
+
+# latitude
+ggplot(gtd, aes(x = latitude)) + geom_histogram() + 
+  labs(title = "Histogram of Attack Lattitudes", x = "Attack Lattitude", 
+  y = "Frequency")
+
+# ingroup
+ggplot(gtd, aes(x = ingroup)) + geom_histogram() + 
+  labs(title = "Histogram of Number of Members in Terrorist Group", 
+  x = "Number of Members in Terrorist Group", y = "Frequency")
+
+# nperp
+ggplot(gtd, aes(x = nperps)) + geom_histogram(binwidth = 5) + 
+  labs(title = "Histogram of Number of Perpetrators", 
+  x = "Number of Perpetrators", y = "Frequency")
+
+# nkill
+ggplot(gtd, aes(x = nkill)) + geom_histogram() + 
+  labs(title = "Histogram of Total Number Killed", 
+  x = "Total Number Killed", y = "Frequency")
+
+# nwound
+ggplot(gtd, aes(x = nwound)) + geom_histogram() + 
+  labs(title = "Histogram of Total Number Wounded", 
+  x = "Total Number of Wounded", y = "Frequency")
+
+# ishostkid
+ggplot(gtd, aes(x = ishostkid)) + geom_histogram() + 
+  labs(x = "Whether or Not A Hostage Was Taken", y = "Frequency", 
+       title = "Whether or Not A Hostage Was Taken")
+
+# nhostkid
+ggplot(gtd, aes(x = nhostkid)) + geom_histogram() + 
+  labs(title = "Histogram of Number of Hostages Kidnapped", 
+  x = "Number of Hostages Kidnapped", y = "Frequency")
+```
+
+## 5) Are there obvious trends in the data (over time, across subgroups, etc.), and are the differences statistically significant?
+
+```{r}
+# subset data of interest 
+gtd.noWTC <- subset(gtd_small, nkill < 1000)
+
+gtd.cont2.df <- select(no.missing.data, success, ingroup, nperps, nkill, nwound, nhostkid)
+gtd.cont2.df.nowtc <- subset(gtd.cont2.df, nkill < 1000)
+cor(gtd.cont2.df.nowtc)
+
+# perform chi squared test between success and nkilled
+test1 <- table(gtd.cont2.df.nowtc$nkill, gtd.cont2.df.nowtc$success)
+chisq.test(test1)
+
+# perform chi squared test between attack type and success
+test2 <- table(gtd.noWTC$attacktype1_txt, gtd.noWTC$success)
+chisq.test(test2)
+
+test3 <- table(gtd.noWTC$attacktype1_txt, gtd.noWTC$ishostkid)
+chisq.test(test3)
+```
+There is a high correlation between the number of casualties in an attack (`nkill`) and number wounded (`nwounded`) and we would not include both variables in a regression model.
+
+We performed chi square tests for a statistically significant relationship between number of casualties and success of attack (not significant), type of attack and success of attack (significant), and the type of attack and whether hostages were taken (significant).
+
+We've selected a number of interesting trends based on our primary and secondary hypotheses. First, we can examine how casualties have changed over time:
+```{r}
+# plot casualties per year
+gg.months <- ggplot(gtd_small, aes(iyear, nkill))
+gg.months + geom_bar(stat = "identity") + xlab("Year") + ylab("Number of Casualties") + 
+  ggtitle("Number of Terrorist Attack Casualties per Year (1970-2015)") + theme_gray() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  scale_x_continuous(breaks = 1970:2015)
+```
+It appears that the 9/11 WTC attacks are a significant outlier. Here's the same chart, minus the WTC attacks:
+```{r}
+# plot
+gg.months <- ggplot(gtd.noWTC, aes(iyear, nkill))
+gg.months + geom_bar(stat="identity") + xlab("Year") + ylab("Number of Casualties") + 
+  ggtitle("Number of Terrorist Attack Casualties per Year, minus WTC (1970-2015)") +
+  scale_x_continuous(breaks=1970:2015) + theme_gray() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+This seems much more helpful for thinking about our model.
+
+Here's the number of successful attacks per attack type (again removing the WTC):
+```{r}
+# plot attack success by attack type, excluding WTC
+gg.success.att <- ggplot(gtd.noWTC, aes(attacktype1_txt, success))
+gg.success.att + geom_bar(stat="identity") + ylab("Number of Successful Attacks") +
+  ggtitle("Number of Successful Attacks per Attack Type (1970-2015") + xlab("Attack Type") +
+  theme_gray() + theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+
+Finally, here's the number of attack successes by weapon type (again, no WTC):
+```{r}
+# fix the long 'Vehicle' label with plyr
+levels(gtd.noWTC$weaptype1_txt)
+gtd.noWTC$weaptype1_txt <- invisible(recode(gtd.noWTC$weaptype1_txt, 
+        "Vehicle (not to include vehicle-borne explosives, i.e., car or truck bombs)" = "Vehicles"))
+
+# plot attack success by weapon type
+gg.success.weap <- ggplot(gtd.noWTC, aes(weaptype1_txt, nkill))
+gg.success.weap + geom_bar(stat="identity") + ylab("Number of Successful Attacks") +
+  ggtitle("Number of Casualties per Weapon Type (1970-2015)") + xlab("Weapon Type") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+
+## 6) What are the other salient aspects of the data (e.g. geospatial factors, text content, etc.)
+
+The data contains spatial coordinates for each attack, which we've mapped here for the 48 contigous United States:
+```{r}
+library(maps)
+us <- map_data("state")
+q <- ggplot() + 
+  geom_polygon(data=us, aes(x=long, y=lat, group=group), color="darkgray", fill="white") +
+  coord_map() + xlim(-125, -65) + ylim(25, 50) +
+  geom_point(data=gtd, aes(x=longitude, y=latitude, color=attacktype1_txt), size=2, alpha=0.5) + 
+  theme_bw() + theme(legend.position="bottom") +
+  ggtitle("Terrorist Attacks in the United States, by Attack Type (1970-2015)") +
+  xlab("Longitude") + ylab("Latitude") +
+  theme(legend.title=element_blank())
+q
+```
+
+The original dataset also included a description of each attack as a `summary` variable. While this is interesting, it is unrelated to our hypotheses and we've chosen to ignore it in this investigation.
+
+## 7) Provide a bullet-list of the next 5-10 tasks you will perform in analyzing your dataset
+
+## What factors (target, attack type, weapons used etc.) predict whether or not an terrorist attack in the United States was a “success”?
+1) Remove any confounding variables by testing for collinearity and determine what variables best predict whether or not a terrorist attack in the US was a “success”.
+2) Create an a-priori multi-variate logistic regression model to determine whether or not a terrorist attack in the US was a success.
+3) Test our hypothesized model as well as variations that might improve its adjusted r-squared value (using stepwise regression).
+4) Perform a k-fold validation on the model.
+
+## What factors (number of attackers, target, attack type, etc.), predict the number of casualties (victims killed or wounded)?
+4) Remove any confounding variables by testing for collinearity and determine what variables best predict the number of casualties in an attack.
+5) Create an a-priori multi-variate regression model, possibly a linear regression, best predict the number of casualties in an attack..
+6) Test our hypothesized model as well as variations that might improve its adjusted r-squared value (using stepwise regression).
+7) Perform a k-fold validation on the model.
+
+## What factors (motivation, terrorist organization type, attack type, etc.), predict whether or not a hostage or hostages were taken?
+8) Remove any confounding variables by testing for collinearity and determine what variables best predict whether or not a hostage or hostages were taken.
+9) Create an a-priori multi-variate logistic regression model to determine whether or not a hostage or hostages were taken.
+10) Test our hypothesized model as well as variations that might improve its adjusted r-squared value (using stepwise regression).
+11) Perform a k-fold validation on the model.
+
+##
+12) Plot a ROC curve and calculate AUC for all relevant models.
+13) Use ColorBrewer2 to illustrate attacks.
