@@ -10,11 +10,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, message=FALSE}
 # load packages
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("maps")
+install.packages("mapproj")
+install.packages("fBasics")
+install.packages("caret")
+install.packages("klaR")
+library(caret)
+library(klaR)
 library(ggplot2)
 library(dplyr)
 library(maps)
 library(mapproj)
 library(fBasics)
+
 
 # load data
 gtd <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
