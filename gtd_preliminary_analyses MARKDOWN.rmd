@@ -25,16 +25,29 @@ library(maps)
 library(mapproj)
 library(fBasics)
 
+# pathway
+# getwd()
+# setwd("/Users/iguest/GlobalTerrorismAnalysis")
 
 # load data
 gtd <- read.csv("globalterrorismdb_0616dist_US_ONLY.csv")
 gtd_small <- select(gtd, success, attacktype1_txt, targtype1_txt, 
                     targsubtype1_txt, weaptype1_txt, weapsubtype1_txt, 
                     iyear, imonth, iday, longitude, latitude, ingroup, 
-                    nperps, nkill, nwound, ishostkid, nhostkid)
+                    nperps, nkill, nwound, ishostkid, nhostkid, attacktype1, targtype1, 
+                    targsubtype1, weaptype1, weapsubtype1)
 
-no.missing.data <- subset(gtd_small, nperps > 0 & nhostkid > 0 & ingroup > 0)
-plot(no.missing.data)
+# Wrangle nulls
+gtd_small[ gtd_small == -99 ] <- NA
+gtd_small <- subset(gtd_small, !is.na(gtd_small$nkill))
+
+# csv check
+# gtd_small
+# write.csv(gtd_small, file = "gtd_smallnonull.csv")
+
+
+
+
 ```
 
 ## 1) How many unique observations to you have?
@@ -260,6 +273,46 @@ The original dataset also included a description of each attack as a `summary` v
 
 ## What factors (target, attack type, weapons used etc.) predict whether or not an terrorist attack in the United States was a “success”?
 1) Remove any confounding variables by testing for collinearity and determine what variables best predict whether or not a terrorist attack in the US was a “success”.
+```{r}
+gtd_small
+plot(gtd_small)
+
+gtd.continuous <- cbind(gtd$success, gtd$iyear, gtd$imonth, gtd$iday, gtd$longitude, 
+                        gtd$latitude, gtd$ingroup, gtd$nperps, gtd$nkill, gtd$nwound, 
+                        gtd$ishostkid, gtd$nhostkid)
+
+plot(cor(gtd$iyear, gtd$ingroup))
+plot(cor(gtd.continuous ))
+cor.test()
+
+
+gtd_small_numeric <- select(gtd, success, attacktype1, targtype1, 
+                    targsubtype1, weaptype1, weapsubtype1, 
+                    iyear, imonth, iday, longitude, latitude, ingroup, 
+                    nperps, nkill, nwound, ishostkid, nhostkid)
+plot(cor(gtd_small_numeric))
+
+chisq.test(table(gtd_small$attacktype1_txt, gtd_small$targtype1_txt))
+chisq.test(table(gtd_small_numeric$attacktype1, gtd_small_numeric$targtype1))
+cor(gtd_small_numeric$attacktype1, gtd_small_numeric$targtype1)
+cor(gtd_small$nkill, gtd_small$nwound, na.rm = TRUE)
+
+fit <- lm(success ~ gtd, attacktype1, targtype1, 
+                    targsubtype1, weaptype1, weapsubtype1, 
+                    nperps, nkill, nwound, ishostkid, nhostkid, data=gtd_small_numeric)
+
+gtd_small_numeric$nkill <- summary(gtd_small_numeric$nkill) / 1000
+
+mod <- lm(nkill ~ attacktype1 + targtype1 + 
+                    + targsubtype1 + weaptype1 + weapsubtype1 +
+                    iyear + imonth + iday + longitude + latitude + ingroup + nperps + success + nwound + ishostkid + nhostkid, family = binomial, data= gtd_small_numeric)
+formula(step(mod))
+
+head(gtd_small_numeric)
+
+```
+
+
 2) Create an a-priori multi-variate logistic regression model to determine whether or not a terrorist attack in the US was a success.
 3) Test our hypothesized model as well as variations that might improve its adjusted r-squared value (using stepwise regression).
 4) Perform a k-fold validation on the model.
