@@ -1,5 +1,5 @@
 # Global Terrorism Analysis 
-##    Analyzing Global Terror Effectiveness
+## --Analyzing Global Terror Effectiveness
 Presentation: https://goo.gl/IdPOZB
 
 # Data set
