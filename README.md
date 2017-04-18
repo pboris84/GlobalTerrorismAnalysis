@@ -1,11 +1,9 @@
 # Global Terrorism Analysis -- Analyzing "Effectiveness" in Global Terrorism in R
-
-# External Links
 Presentation: https://goo.gl/IdPOZB
 
+# Data set
 Data: https://drive.google.com/file/d/0BwSZcpSXYA2GcGlhX3hWOTZ1OU0/view?usp=sharing
-
-Data Codebook: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrajBtekJhMm9TcDg/view?usp=sharing
+Codebook: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrajBtekJhMm9TcDg/view?usp=sharing
 
 
 The dataset of the current study was collected by START researchers at the University of Maryland:
