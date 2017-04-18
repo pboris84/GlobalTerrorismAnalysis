@@ -1,8 +1,10 @@
-# Global Terrorism Analysis -- Analyzing "Effectiveness" in Global Terrorism in R
+# Global Terrorism Analysis 
+## Analyzing Global Terror Effectiveness
 Presentation: https://goo.gl/IdPOZB
 
 # Data set
 Data: https://drive.google.com/file/d/0BwSZcpSXYA2GcGlhX3hWOTZ1OU0/view?usp=sharing
+
 Codebook: https://drive.google.com/a/uw.edu/file/d/0B2srRYTS4HQrajBtekJhMm9TcDg/view?usp=sharing
 
 
