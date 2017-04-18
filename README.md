@@ -1,5 +1,4 @@
-# Global Terrorism Analysis 
-## --Analyzing Global Terror Effectiveness
+# Global Terrorism -- Effectiveness Analysis Project
 Presentation: https://goo.gl/IdPOZB
 
 # Data set
